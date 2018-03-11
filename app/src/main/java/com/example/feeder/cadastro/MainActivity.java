@@ -1,5 +1,6 @@
 package com.example.feeder.cadastro;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,12 +41,26 @@ public class MainActivity extends AppCompatActivity {
 //                    usuario.setRa(dataSnapshot.child("ra").getValue().toString());
 //                    Log.i("tet", usuario.getRa());
 //                String value = dataSnapshot.getValue(String.class);
+                    Usuario usuario = new Usuario();
+                    usuario.setRa(postSnapshot.child("ra").getValue().toString());
+                    usuario.setNome(postSnapshot.child("nome").getValue().toString());
+                    usuario.setEmail(postSnapshot.child("email").getValue().toString());
+                    usuario.setEndereco(postSnapshot.child("endereco").getValue().toString());
                     alunos.add(postSnapshot.child("ra").getValue().toString());
 //                alunos.add(value);
                     final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, alunos);
 
                     listaAlunos = (ListView) findViewById(R.id.lista_alunos);
                     listaAlunos.setAdapter(adapter);
+                    listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intencao = new Intent(MainActivity.this, AlunoActivity.class);
+                            intencao.putExtra("ra_aluno", adapter.getItem(i));
+                            startActivity(intencao);
+                            Log.i("texto", adapter.getItem(i));
+                        }
+                    });
                 }
             }
 

@@ -1,10 +1,12 @@
 package com.example.feeder.cadastro;
 
+import java.io.Serializable;
+
 /**
  * Created by feeder on 11/03/18.
  */
 
-public class Usuario {
+public class Usuario implements Serializable{
 
     String ra;
     String email;
