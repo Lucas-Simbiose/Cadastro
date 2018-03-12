@@ -11,7 +11,7 @@
         android:id="@+id/edt_ra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="RA Aluno"/>
+        android:hint="RA Aluno" />
 
     <EditText
         android:id="@+id/edt_nome"

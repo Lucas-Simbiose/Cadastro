@@ -7,9 +7,17 @@
     android:orientation="vertical"
     tools:context="com.example.feeder.cadastro.MainActivity">
 
+    <Button
+        android:id="@+id/btn_adicionar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar"/>
+
+
     <ListView
         android:id="@+id/lista_alunos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
+
 
 </LinearLayout>

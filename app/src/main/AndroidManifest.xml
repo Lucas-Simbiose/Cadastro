@@ -19,7 +19,6 @@
         <activity
             android:name=".CadastroActivity"
             android:exported="true" />
-        <activity android:name=".AlunoActivity"></activity>
     </application>
 
 </manifest>

@@ -1,12 +1,15 @@
 package com.example.feeder.cadastro;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,37 +35,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final List alunos = new ArrayList();
+        Button botao = (Button) findViewById(R.id.btn_adicionar);
+
+        botao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intencao_novo_aluno = new Intent(MainActivity.this, CadastroActivity.class);
+                startActivity(intencao_novo_aluno);
+            }
+        });
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List alunos = new ArrayList();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-//                    Usuario usuario = new Usuario();
-//                    usuario.setRa(dataSnapshot.child("ra").getValue().toString());
-//                    Log.i("tet", usuario.getRa());
-//                String value = dataSnapshot.getValue(String.class);
-                    Usuario usuario = new Usuario();
-                    usuario.setRa(postSnapshot.child("ra").getValue().toString());
-                    usuario.setNome(postSnapshot.child("nome").getValue().toString());
-                    usuario.setEmail(postSnapshot.child("email").getValue().toString());
-                    usuario.setEndereco(postSnapshot.child("endereco").getValue().toString());
-                    alunos.add(postSnapshot.child("ra").getValue().toString());
-//                alunos.add(value);
-                    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, alunos);
-
-                    listaAlunos = (ListView) findViewById(R.id.lista_alunos);
-                    listaAlunos.setAdapter(adapter);
-                    listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Intent intencao = new Intent(MainActivity.this, AlunoActivity.class);
-                            intencao.putExtra("ra_aluno", adapter.getItem(i));
-                            startActivity(intencao);
-                            Log.i("texto", adapter.getItem(i));
-                        }
-                    });
+                    Usuario aluno = postSnapshot.getValue(Usuario.class);
+                    alunos.add(aluno);
                 }
+                final ArrayAdapter<Usuario> adapter = new ArrayAdapter<Usuario>(MainActivity.this, android.R.layout.simple_list_item_1, alunos);
+                listaAlunos = (ListView) findViewById(R.id.lista_alunos);
+                listaAlunos.setAdapter(adapter);
+                listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Usuario usuario = (Usuario) adapter.getItem(i);
+                        Intent irParaCadastro = new Intent(MainActivity.this, CadastroActivity.class);
+                        irParaCadastro.putExtra("alunoSelecionado", usuario);
+                        startActivity(irParaCadastro);
+
+                    }
+                });
+                listaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        final Usuario usuario = (Usuario) adapter.getItem(i);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("Deseja deletar o Aluno de RA: " + usuario.getRa() + "?").setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                adapter.remove(usuario);
+                                myRef.child(usuario.getRa()).removeValue();
+                            }
+                        })
+                                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        return true;
+                    }
+                });
             }
 
             @Override
@@ -70,23 +97,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-//        this.listaAlunos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                String aluno = (String) adapter.getItem(i);
-//
-//                Toast.makeText(MainActivity.this, "Aluno: " + aluno, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        this.listaAlunos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                Toast.makeText(MainActivity.this, "Clique Longo", Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
     }
 }
