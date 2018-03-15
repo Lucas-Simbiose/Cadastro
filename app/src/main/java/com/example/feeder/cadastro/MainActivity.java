@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intencao_novo_aluno);
             }
         });
+//        b
 //        a
 
 //        myRef.addValueEventListener(new ValueEventListener() {
