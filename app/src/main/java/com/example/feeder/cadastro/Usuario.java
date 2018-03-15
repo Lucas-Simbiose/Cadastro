@@ -53,6 +53,8 @@ public class Usuario implements Serializable{
         this.nome = nome;
     }
 
+    public Usuario(){}
+
     @Override
     public String toString() {
         return this.ra;
