@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(irParaCadastro);
 
                     }
-                });s
+                });
             }
         });
     }
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intencao_novo_aluno);
             }
         });
+//        a
 
 //        myRef.addValueEventListener(new ValueEventListener() {
 //            @Override
